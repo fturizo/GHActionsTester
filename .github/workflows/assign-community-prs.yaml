@@ -13,14 +13,17 @@ jobs:
       pull-requests: write
     steps:
       - name: Get Next Assignee
+        id: get-next-assignee
         env:
           FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
+          echo "::debug::Vars: ${{ vars.FRONT_LINE_USERS_LIST }}"
           members=($(echo ${{ vars.FRONT_LINE_USERS_LIST }} | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
           echo "SELECTED_ASSIGNEE=$next_member" >> "$GITHUB_ENV"
       - name: Assign selected member
+        id: assign-selected-member
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NUMBER: ${{ github.event.number }}
