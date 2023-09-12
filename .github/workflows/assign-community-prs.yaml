@@ -12,13 +12,12 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - id: get-next-assignee
-        name: Get Next Assignee
+      - name: Get Next Assignee
         #TODO - Temporary solution - team member configuration should be dynamic
         env:
-          frontLine: ${{ vars.FRONT_LINE_USERS_LIST }}
+          FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
-          members=($(echo "$frontLine" | tr ',' '\n'))
+          members=($(echo "$FRONT_LINE" | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
           echo "SELECTED_ASSIGNEE=$next_member" >> "$GITHUB_ENV"
@@ -27,5 +26,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NUMBER: ${{ github.event.number }}
         run: |
-          echo "::debug::Selected assignee: SELECTED_ASSIGNEE"
+          echo "::debug::Selected assignee: $SELECTED_ASSIGNEE"
           gh pr edit $NUMBER --add-assignee $SELECTED_ASSIGNEE
