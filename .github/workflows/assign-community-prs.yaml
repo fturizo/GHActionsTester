@@ -1,10 +1,10 @@
-name: Agent Assignment
+name: Agent Assignment to Community Contributions
 on:
   pull_request:
     types:
       - opened
 jobs:
-  assign-frontline-engineer:
+  assign-front-line-engineer:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -15,9 +15,9 @@ jobs:
           frontLine: ${{ vars.FRONT_LINE_USERS_LIST }}
         #TODO - Temporary solution - team member configuration should be dynamic
         run: |
-          echo "::set-output name=members::$frontLine"
+          echo "Current members of the front-line:  $frontLine"
       - name: Get Next Team Member
-        id: next-member
+        id: get-next-member
         run: |
           members=($(echo "${{ steps.team-members.outputs.members }}" | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
