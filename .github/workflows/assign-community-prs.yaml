@@ -7,6 +7,7 @@ jobs:
   assign-front-line-engineer:
     runs-on: ubuntu-latest
     #Conditionally runs the job if the author of the PR is not an owner or member of the organisation
+    #See https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
     if: ${{ github.event.pull_request.author_association != 'OWNER' && github.event.pull_request.author_association != 'MEMBER' }}
     permissions:
       pull-requests: write
@@ -20,6 +21,11 @@ jobs:
           members=($(echo "$frontLine" | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
-          echo "selected_assignee=$next_member" >> "$GITHUB_ENV"
-      - run: |
-          echo "Selected assignee: $selected_assignee"
+          echo "SELECTED_ASSIGNEE=$next_member" >> "$GITHUB_ENV"
+      - name: Assign selected member
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUMBER: ${{ github.event.number }}
+        run: |
+          echo "::debug::Selected assignee: SELECTED_ASSIGNEE"
+          gh pr edit $NUMBER --add-assignee $SELECTED_ASSIGNEE
