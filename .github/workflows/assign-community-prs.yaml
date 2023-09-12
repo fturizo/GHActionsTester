@@ -9,15 +9,14 @@ jobs:
     #Conditionally runs the job if the author of the PR is not an owner or member of the organisation
     #See https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
     if: ${{ github.event.pull_request.author_association != 'OWNER' && github.event.pull_request.author_association != 'MEMBER' }}
-    env:
-      FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
     permissions:
       pull-requests: write
     steps:
       - name: Get Next Assignee
-        #TODO - Temporary solution - team member configuration should be dynamic
+        env:
+          FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
-          members=($(echo "$FRONT_LINE" | tr ',' '\n'))
+          members=($(echo ${{ vars.FRONT_LINE_USERS_LIST }} | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
           echo "SELECTED_ASSIGNEE=$next_member" >> "$GITHUB_ENV"
