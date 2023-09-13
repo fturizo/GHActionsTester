@@ -3,6 +3,7 @@ on:
   pull_request_target:
     types:
       - opened
+      - reopened
 jobs:
   assign-front-line-engineer:
     runs-on: ubuntu-latest
@@ -17,7 +18,7 @@ jobs:
         env:
           FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
-          if [ ! -z $FRONT_LINE ]; then
+          if [ -z $FRONT_LINE ]; then
             echo "::error::'FRONT_LINE_USERS_LIST' environment variable is not set"
             exit 1
           fi
