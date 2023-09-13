@@ -1,6 +1,6 @@
 name: Agent Assignment to Community Contributions
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
 jobs:
@@ -17,7 +17,6 @@ jobs:
         env:
           FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
-          echo "::debug::Vars: $FRONT_LINE"
           members=($(echo $FRONT_LINE | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
@@ -26,7 +25,7 @@ jobs:
         id: assign-selected-member
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ github.event.number }}
         run: |
           echo "::debug::Selected assignee: $SELECTED_ASSIGNEE"
-          gh pr edit $NUMBER --add-assignee $SELECTED_ASSIGNEE
+          gh pr edit $PR_NUMBER --add-assignee $SELECTED_ASSIGNEE
