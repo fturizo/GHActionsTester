@@ -35,4 +35,4 @@ jobs:
         if: success()
         run: |
           echo "::debug::Selected assignee: $SELECTED_ASSIGNEE"
-          gh pr edit $PR_NUMBER --add-assignee $SELECTED_ASSIGNEE --repo $GH_REPOSITORY
+          gh pr edit $PR_NUMBER --add-assignee $SELECTED_ASSIGNEE
