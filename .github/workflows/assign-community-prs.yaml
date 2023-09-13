@@ -17,6 +17,10 @@ jobs:
         env:
           FRONT_LINE: ${{ vars.FRONT_LINE_USERS_LIST }}
         run: |
+          if [! -z $FRONT_LINE] then
+            echo "::error::'FRONT_LINE_USERS_LIST' environment variable is not set"
+            exit 1
+          fi
           members=($(echo $FRONT_LINE | tr ',' '\n'))
           index=$(( (${GITHUB_RUN_NUMBER}-1) % ${#members[@]} ))
           next_member=${members[$index]}
@@ -26,6 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
+        if: success()
         run: |
           echo "::debug::Selected assignee: $SELECTED_ASSIGNEE"
           gh pr edit $PR_NUMBER --add-assignee $SELECTED_ASSIGNEE
