@@ -43,7 +43,7 @@ jobs:
         uses: simbo/msteams-message-card-action@latest
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
-          title: New Community Contribution received!
-          message: <pre>${{ env.PR_TITLE }}</pre> assigned to <strong>${{ env.SELECTED_ASSIGNEE }}</strong>
+          title: A new Community Contribution has been raised (or re-opened)!
+          message: <code>${{ env.PR_TITLE }}</code> assigned to <strong>${{ env.SELECTED_ASSIGNEE }}</strong>
           buttons: |
             View PR on GitHub ${{ env.PR_URL }}
