@@ -12,6 +12,9 @@ jobs:
     if: github.event.pull_request.author_association != 'OWNER' && github.event.pull_request.author_association != 'MEMBER'
     permissions:
       pull-requests: write
+    env:
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
     steps:
       - name: Get Next Assignee
         id: get-next-assignee
@@ -30,9 +33,17 @@ jobs:
         id: assign-selected-member
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPOSITORY: ${{ github.event.repository.name }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
         if: success()
         run: |
           echo "::debug::Selected assignee: $SELECTED_ASSIGNEE"
           gh pr edit $PR_URL --add-assignee $SELECTED_ASSIGNEE
+      - name: Notify MS Teams channel
+        id: notify-ms-teams
+        uses: simbo/msteams-message-card-action@latest
+        if: success()
+        with:
+          webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
+          title: New Community Contribution received!
+          message: "${{ env.PR_TITLE }}" assigned to ${{ env.SELECTED_ASSIGNEE }}
+          buttons: |
+            View on Github ${{ env.PR_URL }}
