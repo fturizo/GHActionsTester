@@ -44,6 +44,6 @@ jobs:
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: New Community Contribution received!
-          message: <strong>${{ env.PR_TITLE }}</strong> assigned to ${{ env.SELECTED_ASSIGNEE }}
+          message: <pre>${{ env.PR_TITLE }}</pre> assigned to <strong>${{ env.SELECTED_ASSIGNEE }}</strong>
           buttons: |
-            View on Github ${{ env.PR_URL }}
+            View PR on GitHub ${{ env.PR_URL }}
