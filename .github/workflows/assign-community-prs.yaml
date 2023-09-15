@@ -39,11 +39,11 @@ jobs:
           gh pr edit $PR_URL --add-assignee $SELECTED_ASSIGNEE
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        uses: simbo/msteams-message-card-action@latest
         if: success()
+        uses: simbo/msteams-message-card-action@latest
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: New Community Contribution received!
-          message: "${{ env.PR_TITLE }}" assigned to ${{ env.SELECTED_ASSIGNEE }}
+          message: <strong>${{ env.PR_TITLE }}</strong> assigned to ${{ env.SELECTED_ASSIGNEE }}
           buttons: |
             View on Github ${{ env.PR_URL }}
