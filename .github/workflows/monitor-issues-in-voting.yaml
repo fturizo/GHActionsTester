@@ -15,7 +15,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const script = require('.github/workflows/scripts/selectMostVotedIssue.js')
+            const script = require(`${github.action_path}/scripts/selectMostVotedIssue.js`)
             console.log(script({github, context}))
 #      - uses: neonidian/teams-notify-build-status@v3
 #        if: ${{ steps.vote-issues.outputs.result}}
