@@ -1,4 +1,4 @@
-module.exports = async ({github, context}) => {
+module.exports = async ({github, context, core}) => {
     let { owner, repo } = context.repo;
 
     const openLabel = "Status: Open";
