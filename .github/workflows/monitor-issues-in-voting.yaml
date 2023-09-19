@@ -1,0 +1,24 @@
+name: Monitor issues on voting status
+on:
+  schedule:
+#    - cron: "0 10 1 * *"
+    - cron: "*/3 * * * *"
+
+jobs:
+  select-top-voted-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Select the most voted enhancement
+        id: select-top-voted-issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const script = require('./scripts/selectMostVotedIssue.js')
+            console.log(script({github, context}))
+#      - uses: neonidian/teams-notify-build-status@v3
+#        if: ${{ steps.vote-issues.outputs.result}}
+#        with:
+#          webhookUrl: ${{ secrets.TEAMS_INCOMING_WEBHOOK_URL }}   # Secret name is "TEAMS_INCOMING_WEBHOOK_URL"
+#          message: The  Github issue number ${{ steps.vote-issues.outputs.result }} has been selected for voting and thus requires to be escalated.
