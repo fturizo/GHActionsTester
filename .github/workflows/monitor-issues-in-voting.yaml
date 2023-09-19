@@ -10,12 +10,13 @@ jobs:
     permissions:
       issues: write
     steps:
+      - uses: actions/checkout@v3
       - name: Select the most voted enhancement
         id: select-top-voted-issue
         uses: actions/github-script@v6
         with:
           script: |
-            const script = require("${{ github.action_path }}/.github/workflows/scripts/selectMostVotedIssue.js")
+            const script = require('./scripts/selectMostVotedIssue.js')
             console.log(script({github, context}))
 #      - uses: neonidian/teams-notify-build-status@v3
 #        if: ${{ steps.vote-issues.outputs.result}}
