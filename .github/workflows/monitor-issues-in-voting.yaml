@@ -23,11 +23,13 @@ jobs:
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
         env:
+          issueTitle: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).title }}
           issueURL: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).url }}
+          assignee: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).assignee }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
-          message: <code>${{ steps.select-top-voted-issue.outputs.result }}</code> assigned to <strong>${{ env.assignee }}</strong>
+          message: <code>${{ env.issueTitle }}</code> assigned to <strong>${{ env.assignee }}</strong>
           buttons: |
             View Issue on GitHub ${{ env.issueURL }}
   close-forgotten-voting-issues:

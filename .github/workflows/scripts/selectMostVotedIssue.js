@@ -60,7 +60,6 @@ module.exports = async ({github, context, core}) => {
         issue_number: selectedIssue.number,
         body: message
     });
-/*
     await github.rest.issues.update({
         owner : owner,
         repo : repo,
@@ -68,7 +67,6 @@ module.exports = async ({github, context, core}) => {
         labels : [openLabel]
     });
 
- */
     core.exportVariable('issueURL', selectedIssue.html_url);
 
     return {
