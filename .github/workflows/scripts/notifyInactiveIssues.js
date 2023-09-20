@@ -18,10 +18,9 @@ module.exports = async ({github, context, core, daysInterval}) => {
     core.debug(`${inactiveIssues.length} issues detected to be inactive`);
 
     const issuesResponseData = inactiveIssues.map((issue) => issue.number);
-    if (issuesResponseData.length > 0) {
-        const issueList =  issuesResponseData.toString();
-        core.info(`The issues to update are : `);
-        core.info(issuesResponseData.toString());
-        return issueList;
+    if (inactiveIssues.length > 0) {
+        return inactiveIssues.map((issue) => {
+            number: issue.number
+        });
     }
 }
