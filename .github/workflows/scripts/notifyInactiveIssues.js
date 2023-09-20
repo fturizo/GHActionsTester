@@ -17,10 +17,14 @@ module.exports = async ({github, context, core, daysInterval}) => {
 
     core.debug(`${inactiveIssues.length} issues detected to be inactive`);
 
-    const issuesResponseData = inactiveIssues.map((issue) => issue.number);
     if (inactiveIssues.length > 0) {
         return inactiveIssues.map((issue) => {
-            number: issue.number
+            return {
+                number : issue.number,
+                title : issue.title,
+                url: issue.html_url,
+                assignee: issue.assignees.length ? selectedIssue.assignees[0].login : null
+            }
         });
     }
 }

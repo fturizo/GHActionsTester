@@ -20,12 +20,12 @@ jobs:
             return await script({github, context, core})
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        if: success() && ${{ steps.select-top-voted-issue.output.result }}
+        if: ${{ success() && steps.select-top-voted-issue.output.result }}
         uses: simbo/msteams-message-card-action@latest
         env:
-          issueTitle : ${{ steps.select-top-voted-issue.output.result.title }}
-          issueURL : ${{ steps.select-top-voted-issue.output.result.url }}
-          assignee : ${{ steps.select-top-voted-issue.output.result.assignee }}
+          issueTitle: ${{ steps.select-top-voted-issue.output.result.title }}
+          issueURL: ${{ steps.select-top-voted-issue.output.result.url }}
+          assignee: ${{ steps.select-top-voted-issue.output.result.assignee }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
@@ -55,4 +55,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js');
-            await script({github, context, core, "${{ env.maximumVotingThreshold }}"});
+            await script({github, context, core, '${{ env.maximumVotingThreshold }}' });

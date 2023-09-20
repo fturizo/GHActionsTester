@@ -7,8 +7,6 @@ module.exports = async ({github, context, core, daysInterval}) => {
         labels: votingLabel,
         state: 'open',
     });
-
-    //response has all the issues labeled with Voting.
     if (response.data.length === 0) {
         core.debug('No issues marked for voting found. Exiting.');
         return;
