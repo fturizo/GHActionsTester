@@ -22,9 +22,9 @@ module.exports = async ({github, context, core, daysInterval}) => {
 
         let createdDate = new Date(issue.created_at).getTime();
         let daysSinceCreated = (now - createdDate) / 1000 / 60 / 60 / 24;
-
         let reactions = issue.reactions['+1'];
-        core.debug(`reaction is ${reactions}`);
+
+        core.debug(`Issue +1 reactions count is ${reactions}`);
 
         if (reactions < 2 && daysSinceCreated > parsedDays) {
             core.debug(`Closing #${issue.number} because it hasn't received enough votes after ${parsedDays} days`);
@@ -44,7 +44,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
                 owner : owner,
                 repo : repo,
                 issue_number: issue.number,
-                body: message,
+                body: message
             });
 
             await github.rest.issues.update({
@@ -52,7 +52,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
                 repo: repo,
                 issue_number: issue.number,
                 labels: [],
-                state: 'closed',
+                state: 'closed'
             });
         }
     }

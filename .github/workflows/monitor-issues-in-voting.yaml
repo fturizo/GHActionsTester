@@ -32,7 +32,7 @@ jobs:
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
           message: <code>${{ env.issueTitle }}</code> assigned to <strong>${{ env.assignee }}</strong>
           buttons: |
-            View Issue on GitHub ${{ env.issueURL }}
+            View Issue on GitHub ${{ steps.select-top-voted-issue.outputs.result.url }}
   close-forgotten-voting-issues:
     runs-on: ubuntu-latest
     permissions:

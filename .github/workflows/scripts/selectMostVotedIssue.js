@@ -2,7 +2,7 @@ module.exports = async ({github, context, core}) => {
     let { owner, repo } = context.repo;
 
     const openLabel = "Status: Open";
-    let votingLabel = "Status: Voting";
+    const votingLabel = "Status: Voting";
 
     // Query all GH issues for Voting
     const response = await github.rest.issues.listForRepo({
