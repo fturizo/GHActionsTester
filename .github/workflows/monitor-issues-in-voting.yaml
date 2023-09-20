@@ -18,11 +18,18 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/selectMostVotedIssue.js')
             return await script({github, context, core})
-#      - uses: neonidian/teams-notify-build-status@v3
-#        if: ${{ steps.vote-issues.outputs.result}}
-#        with:
-#          webhookUrl: ${{ secrets.TEAMS_INCOMING_WEBHOOK_URL }}   # Secret name is "TEAMS_INCOMING_WEBHOOK_URL"
-#          message: The  Github issue number ${{ steps.vote-issues.outputs.result }} has been selected for voting and thus requires to be escalated.
+      - name: Notify MS Teams channel
+        id: notify-ms-teams
+        if: success()
+        uses: simbo/msteams-message-card-action@latest
+        env:
+          issue : ${{ steps.select-top-voted-issue.output.result }}
+        with:
+          webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
+          title: An Enhancement Proposal Issue has been selected the top-voted issue!
+          message: <code>${{ env.issue.title }}</code> assigned to <strong>${{ env.issue.assignee }}</strong>
+          buttons: |
+            View Issue on GitHub ${{ env.issue.url }}
   close-forgotten-voting-issues:
     runs-on: ubuntu-latest
     permissions:
@@ -46,4 +53,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            await script({github, context, core, "${ env.maximumVotingThreshold }"})
+            await script({github, context, core, "${{ env.maximumVotingThreshold }}")

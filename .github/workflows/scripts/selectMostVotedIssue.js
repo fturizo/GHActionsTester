@@ -69,7 +69,9 @@ module.exports = async ({github, context, core}) => {
     });
 
     return {
-        issue : selectedIssue.number,
+        number : selectedIssue.number,
+        title : selectedIssue.title,
+        url: selectedIssue.html_url,
         assignee: selectedIssue.assignees.length ? selectedIssue.assignees[0].login : null
     };
 }
