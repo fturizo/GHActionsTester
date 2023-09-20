@@ -51,4 +51,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            await script({github, context, core})
+            script({github, context, core, "${{ maximumVotingThreshold }}"})
