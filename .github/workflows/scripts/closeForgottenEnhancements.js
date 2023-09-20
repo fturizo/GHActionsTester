@@ -1,8 +1,8 @@
-module.exports = async ({github, context, core}) => {
+module.exports = async ({github, context, core, daysInterval: string}) => {
     const {owner, repo} = context.repo;
 
     let votingLabel = "Status: Voting";
-    let parsedDays = parseFloat(process.env.daysInterval);
+    let parsedDays = parseFloat(daysInterval);
 
     // Query all GH issues for Voting
     let response = await github.rest.issues.listForRepo({
@@ -39,15 +39,22 @@ module.exports = async ({github, context, core}) => {
                 `;
 
             await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner : owner,
+                repo : repo,
                 issue_number: issue.number,
                 name: votingLabel,
             });
 
+            await github.rest.issues.lock({
+                owner : owner,
+                repo : repo,
+                issue_number : issue.number,
+                lock_reason : 'resolved'
+            });
+
             await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner : owner,
+                repo : repo,
                 issue_number: issue.number,
                 body: message,
             });

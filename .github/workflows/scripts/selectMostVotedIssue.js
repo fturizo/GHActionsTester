@@ -5,7 +5,7 @@ module.exports = async ({github, context, core}) => {
     let votingLabel = "Status: Voting";
 
     // Query all GH issues for Voting
-    let response = await github.rest.issues.listForRepo({
+    const response = await github.rest.issues.listForRepo({
         owner,
         repo,
         labels: votingLabel,
@@ -25,19 +25,17 @@ module.exports = async ({github, context, core}) => {
         return;
     }
 
-    //response.data.sort.reactions-+1;
-
-    var mostVotes = 0;
-    var selectedIssue = 0;
-    var oldestDate = null;
+    let mostVotes = 0;
+    let selectedIssue = 0;
+    let oldestDate = null;
 
     for (const issue of response.data) {
         core.debug(`Processing issue #${issue.number}`);
         core.debug(`Number of +1 reactions ${issue.reactions['+1']}`);
         core.debug(`Issue was created ${issue.created_at}`);
 
-        var votes = issue.reactions['+1'];
-        var createdDate = new Date(issue.created_at).getTime();
+        let votes = issue.reactions['+1'];
+        let createdDate = new Date(issue.created_at).getTime();
 
         if (oldestDate === null) {
             oldestDate = createdDate;
@@ -59,8 +57,8 @@ module.exports = async ({github, context, core}) => {
     `;
 
     await github.rest.issues.createComment({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+        owner : owner,
+        repo : repo,
         issue_number: selectedIssue.number,
         body: message,
     });
