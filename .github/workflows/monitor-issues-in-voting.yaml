@@ -22,12 +22,14 @@ jobs:
         id: notify-ms-teams
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
+        env:
+          issueURL: ${{ steps.select-top-voted-issue.outputs.result.url }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
           message: <code>${{ steps.select-top-voted-issue.outputs.result }}</code> assigned to <strong>${{ env.assignee }}</strong>
           buttons: |
-            View Issue on GitHub ${{ steps.select-top-voted-issue.outputs.result.url }}
+            View Issue on GitHub ${{ env.issueURL }}
   close-forgotten-voting-issues:
     runs-on: ubuntu-latest
     permissions:
