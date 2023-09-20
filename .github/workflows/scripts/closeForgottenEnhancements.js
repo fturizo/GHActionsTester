@@ -1,6 +1,8 @@
 module.exports = async ({github, context, core, daysInterval}) => {
     const {owner, repo} = context.repo;
     // Query all GH issues for Voting
+
+    const votingLabel = "Status: Voting";
     let response = await github.rest.issues.listForRepo({
         owner,
         repo,
@@ -11,6 +13,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
         core.debug('No issues marked for voting found. Exiting.');
         return;
     }
+    const parsedDays = parseFloat(daysInterval);
 
     let now = new Date().getTime();
     for (let issue of response.data) {

@@ -18,6 +18,7 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/selectMostVotedIssue.js')
             return await script({github, context, core})
+      - run: echo ${{ steps.select-top-voted-issue.outputs.result }}
       - name: Notify MS Teams channel
         id: notify-ms-teams
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
@@ -55,4 +56,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            await script({github, context, core, '0.007' })
+            await script({github, context, core, '0.007'})
