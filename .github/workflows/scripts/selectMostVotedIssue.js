@@ -50,11 +50,9 @@ module.exports = async ({github, context, core}) => {
     core.debug(`Highest votes is  ${mostVotes}`);
     core.debug(`Final issue selected for enhancement is #${selectedIssue.number} created on ${selectedIssue.created_at}`);
 
-    let message = `
-            Greetings, 
-              This enhancement request has been selected by the Payara Community as the most voted enhancement of this month and
-              thus will be escalated to our product development backlog.
-    `;
+    let message = `Greetings, 
+       This enhancement request has been selected by the Payara Community as the most voted enhancement of this month and
+       thus will be escalated to our product development backlog.`;
 
     await github.rest.issues.createComment({
         owner : owner,
