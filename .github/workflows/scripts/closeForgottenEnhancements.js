@@ -1,4 +1,4 @@
-module.exports = async ({github, context, core, daysInterval: string}) => {
+module.exports = async ({github, context, core, daysInterval}) => {
     const {owner, repo} = context.repo;
 
     let votingLabel = "Status: Voting";
@@ -32,8 +32,7 @@ module.exports = async ({github, context, core, daysInterval: string}) => {
         if (reactions < 2 && daysSinceCreated > parsedDays) {
             core.debug(`Closing #${issue.number} because it hasn't received enough votes after ${parsedDays} days`);
 
-            const message = `
-                Greetings,
+            const message = `Greetings,
                   This issue has been open for community voting for more than ${parsedDays} days and sadly it hasn't received enough votes to be considered for its implementation according to our community policies.
                   As there is not enough interest from the community we'll proceed to close this issue.
                 `;
@@ -60,8 +59,8 @@ module.exports = async ({github, context, core, daysInterval: string}) => {
             });
 
             await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner: owner,
+                repo: repo,
                 issue_number: issue.number,
                 state: 'closed',
             });
