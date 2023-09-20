@@ -45,10 +45,10 @@ jobs:
       - uses: actions/checkout@v3
         if: success()
       - name: Close "forgotten" enhancement requests
-        id: old-vote-issues
+        id: close-forgotten-enhancements
         if: success()
         uses: actions/github-script@v6
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            script({github, context, core, '7'})
+#            script({github, context, core, '7'})
