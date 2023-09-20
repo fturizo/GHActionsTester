@@ -1,4 +1,4 @@
-module.exports = async ({github, context, core, days}) => {
+module.exports = async ({github, context, core}) => {
     const {owner, repo} = context.repo;
     // Query all GH issues for Voting
 
@@ -13,7 +13,8 @@ module.exports = async ({github, context, core, days}) => {
         core.debug('No issues marked for voting found. Exiting.');
         return;
     }
-    const parsedDays = parseFloat(days);
+    const votingThreshold = process.env.maximumVotingThreshold;
+    const parsedDays = parseFloat(votingThreshold);
 
     let now = new Date().getTime();
     for (let issue of response.data) {
