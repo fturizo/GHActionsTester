@@ -22,10 +22,6 @@ jobs:
         id: notify-ms-teams
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
-        env:
-          issueTitle: ${{ steps.select-top-voted-issue.outputs.result.title }}
-          issueURL: ${{ steps.select-top-voted-issue.outputs.result.url }}
-          assignee: ${{ steps.select-top-voted-issue.outputs.result.assignee }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
@@ -55,4 +51,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            script({github, context, core, '0.007'})
+            script({github, context, core, '7'})
