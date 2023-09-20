@@ -20,7 +20,7 @@ jobs:
             return await script({github, context, core})
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        if: ${{ success() && steps.select-top-voted-issue.output.result }}
+        if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
         env:
           issueTitle: ${{ steps.select-top-voted-issue.outputs.result.title }}
@@ -54,5 +54,5 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js');
-            await script({github, context, core, '${{ env.maximumVotingThreshold }}' });
+            const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
+            await script({github, context, core, '0.007' })
