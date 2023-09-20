@@ -23,7 +23,7 @@ jobs:
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
         env:
-          issueURL: ${{ steps.select-top-voted-issue.outputs.result.url }}
+          issueURL: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).url }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
