@@ -1,9 +1,5 @@
 module.exports = async ({github, context, core, daysInterval}) => {
     const {owner, repo} = context.repo;
-
-    let votingLabel = "Status: Voting";
-    let parsedDays = parseFloat(daysInterval);
-
     // Query all GH issues for Voting
     let response = await github.rest.issues.listForRepo({
         owner,
@@ -34,15 +30,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
 
             const message = `Greetings,
                   This issue has been open for community voting for more than ${parsedDays} days and sadly it hasn't received enough votes to be considered for its implementation according to our community policies.
-                  As there is not enough interest from the community we'll proceed to close this issue.
-                `;
-
-            await github.rest.issues.removeLabel({
-                owner : owner,
-                repo : repo,
-                issue_number: issue.number,
-                name: votingLabel,
-            });
+                  As there is not enough interest from the community we'll proceed to close this issue.`;
 
             await github.rest.issues.lock({
                 owner : owner,
@@ -62,6 +50,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
                 owner: owner,
                 repo: repo,
                 issue_number: issue.number,
+                labels: [],
                 state: 'closed',
             });
         }

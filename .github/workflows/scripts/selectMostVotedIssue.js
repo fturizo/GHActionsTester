@@ -58,7 +58,14 @@ module.exports = async ({github, context, core}) => {
         owner : owner,
         repo : repo,
         issue_number: selectedIssue.number,
-        body: message,
+        body: message
+    });
+
+    await github.rest.issues.update({
+        owner : owner,
+        repo : repo,
+        issue_number: selectedIssue.number,
+        labels : [openLabel]
     });
 
     return {
