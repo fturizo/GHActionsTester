@@ -1,3 +1,3 @@
-module.exports = async ({github, context, core, daysInterval}) => {
+module.exports = async ({github, context, core}) => {
     return true;
 }
