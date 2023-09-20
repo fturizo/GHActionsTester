@@ -25,7 +25,7 @@ jobs:
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
-          message: <code>${{ env.issueTitle }}</code> assigned to <strong>${{ env.assignee }}</strong>
+          message: <code>${{ steps.select-top-voted-issue.outputs.result }}</code> assigned to <strong>${{ env.assignee }}</strong>
           buttons: |
             View Issue on GitHub ${{ steps.select-top-voted-issue.outputs.result.url }}
   close-forgotten-voting-issues:
