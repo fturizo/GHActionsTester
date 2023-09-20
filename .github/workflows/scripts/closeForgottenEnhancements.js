@@ -34,13 +34,6 @@ module.exports = async ({github, context, core}) => {
                   This issue has been open for community voting for more than ${parsedDays} days and sadly it hasn't received enough votes to be considered for its implementation according to our community policies.
                   As there is not enough interest from the community we'll proceed to close this issue.`;
 
-            await github.rest.issues.lock({
-                owner : owner,
-                repo : repo,
-                issue_number : issue.number,
-                lock_reason : 'resolved'
-            });
-
             await github.rest.issues.createComment({
                 owner : owner,
                 repo : repo,
@@ -54,6 +47,13 @@ module.exports = async ({github, context, core}) => {
                 issue_number: issue.number,
                 labels: [],
                 state: 'closed'
+            });
+
+            await github.rest.issues.lock({
+                owner : owner,
+                repo : repo,
+                issue_number : issue.number,
+                lock_reason : 'resolved'
             });
         }
     }
