@@ -1,8 +1,8 @@
 name: Monitor issues on voting status
-on:
-  schedule:
+on: workflow_dispatch
+#  schedule:
 #    - cron: "0 10 1 * *"
-    - cron: "*/5 * * * *"
+
 
 jobs:
   select-top-voted-issue:
@@ -18,7 +18,6 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/selectMostVotedIssue.js')
             return await script({github, context, core})
-      - run: echo ${{ steps.select-top-voted-issue.outputs.result }}
       - name: Notify MS Teams channel
         id: notify-ms-teams
         if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
@@ -32,7 +31,7 @@ jobs:
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
           message: <code>${{ env.issueTitle }}</code> assigned to <strong>${{ env.assignee }}</strong>
           buttons: |
-            View Issue on GitHub ${{ steps.select-top-voted-issue.outputs.result.url }}
+            View Issue on GitHub ${{ env.issueURL }}
   close-forgotten-voting-issues:
     runs-on: ubuntu-latest
     permissions:
@@ -56,4 +55,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/closeForgottenEnhancements.js')
-            await script({github, context, core, '0.007'})
+            script({github, context, core, '0.007'})
