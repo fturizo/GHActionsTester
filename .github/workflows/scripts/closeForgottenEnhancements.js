@@ -2,7 +2,7 @@ module.exports = async ({github, context}) => {
     const {owner, repo} = context.repo;
 
     let votingLabel = "Status: Voting";
-    let parsedDays = parseFloat("${{ env.daysInterval }}");
+    let parsedDays = parseFloat(process.env.daysInterval);
 
     // Query all GH issues for Voting
     let response = await github.rest.issues.listForRepo({
