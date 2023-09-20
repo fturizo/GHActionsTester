@@ -1,4 +1,4 @@
-module.exports = async ({github, context}) => {
+module.exports = async ({github, context, core}) => {
     const {owner, repo} = context.repo;
 
     let votingLabel = "Status: Voting";
