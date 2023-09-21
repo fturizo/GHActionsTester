@@ -1,4 +1,4 @@
-module.exports = async ({github, context, core, daysInterval}) => {
+module.exports = async ({github, context, core}) => {
     const { owner, repo } = context.repo;
     const openLabel = "Status: Open";
 
@@ -31,7 +31,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
                 number : issue.number,
                 title : issue.title,
                 url: issue.html_url,
-                assignee: issue.assignees.length ? selectedIssue.assignees[0].login : null
+                assignee: issue.assignees.length ? issue.assignees[0].login : null
             });
         }
     }
