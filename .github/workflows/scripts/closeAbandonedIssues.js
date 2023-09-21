@@ -32,7 +32,7 @@ module.exports = async ({github, context, core}) => {
                 owner,
                 repo,
                 issue_number: issue.number,
-                labels: [abandonedLabel],
+                labels: [],
                 state: "closed"
             });
         }
