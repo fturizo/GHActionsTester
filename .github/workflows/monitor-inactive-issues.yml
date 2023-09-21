@@ -10,7 +10,7 @@ jobs:
       issues: write
     env:
       inactiveIntervalDays: ${{ vars.MONITORING_INACTIVE_INTERVAL_DAYS }}
-    output:
+    outputs:
       issues: ${{ steps.filter-inactive-issues.outputs.result }}
     steps:
       - name: Check environment
