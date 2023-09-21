@@ -2,7 +2,7 @@ module.exports = async ({github, context, core, daysInterval}) => {
     const { owner, repo } = context.repo;
     const openLabel = "Status: Open";
 
-    const parsedDays = parseFloat(daysInterval);
+    const parsedDays = process.env.inactiveIntervalDays;
     const thresholdInMillis = parsedDays * 24 * 60 * 60 * 1000;
 
     // Query all GH issues that are open

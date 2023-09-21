@@ -4,12 +4,14 @@ on: workflow_dispatch
 #  schedule:
 #    - cron: "0 10 * * 1-5"
 jobs:
-  notify-inactive-issues:
+  retrieve-inactive-issues:
     runs-on: ubuntu-latest
     permissions:
       issues: write
     env:
       inactiveIntervalDays: ${{ vars.MONITORING_INACTIVE_INTERVAL_DAYS }}
+    output:
+      issues: ${{ steps.filter-inactive-issues.outputs.result }}
     steps:
       - name: Check environment
         run: |
@@ -25,14 +27,18 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/filterInactiveIssues.js');
-            await script({github, context, core, '${{ env.inactiveIntervalDays }}' });
+            await script({github, context, core});
+  notify-inactive-issues:
+    runs-on: ubuntu-latest
+    needs: retrieve-inactive-issues
+    if: ${{ needs.retrieve-inactive-issues.outputs.issues }}
+    strategy:
+      matrix:
+        issues: ${{ fromJSON(needs.retrieve-inactive-issues.outputs.issues) }}
+    steps:
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        if: ${{ success() && steps.filter-inactive-issues.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
-        strategy:
-          matrix:
-            issues: ${{ fromJSON(steps.filter-inactive-issues.outputs.result) }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
