@@ -1,8 +1,7 @@
 name: Monitor issues on voting status
-on: workflow_dispatch
-#  schedule:
-#    - cron: "0 10 1 * *"
-
+on:
+  schedule:
+    - cron: "0 10 1 * *"
 
 jobs:
   select-top-voted-issue:

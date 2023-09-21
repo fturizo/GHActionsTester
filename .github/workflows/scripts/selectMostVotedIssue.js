@@ -67,8 +67,6 @@ module.exports = async ({github, context, core}) => {
         labels : [openLabel]
     });
 
-    core.exportVariable('issueURL', selectedIssue.html_url);
-
     return {
         number : selectedIssue.number,
         title : selectedIssue.title,

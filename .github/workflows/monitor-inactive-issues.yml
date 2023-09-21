@@ -1,0 +1,40 @@
+name: Monitor Inactive Open Issues
+
+on: workflow_dispatch
+#  schedule:
+#    - cron: "0 10 * * 1-5"
+jobs:
+  notify-inactive-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      inactiveIntervalDays: ${{ vars.MONITORING_INACTIVE_INTERVAL_DAYS }}
+    steps:
+      - name: Check environment
+        run: |
+          if [ -z $inactiveIntervalDays ]; then
+            echo "::error::'MONITORING_INACTIVE_INTERVAL_DAYS' environment variable is not set"
+            exit 1
+          fi
+      - uses: actions/checkout@v3
+        if: success()
+      - name: Filter inactive issues
+        id: filter-inactive-issues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const script = require('./.github/workflows/scripts/filterInactiveIssues.js');
+            await script({github, context, core, '${{ env.inactiveIntervalDays }}' });
+      - name: Notify MS Teams channel
+        id: notify-ms-teams
+        if: ${{ success() && steps.filter-inactive-issues.outputs.result }}
+        uses: simbo/msteams-message-card-action@latest
+        matrix:
+          issues: ${{ fromJSON(steps.filter-inactive-issues.outputs.result) }}
+        with:
+          webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
+          title: An Enhancement Proposal Issue has been selected the top-voted issue!
+          message: <code>${{ matrix.issues.title }}</code> assigned to <strong>${{ matrix.issues.assignee }}</strong>
+          buttons: |
+            View Issue on GitHub ${{ matrix.issues.url }}
