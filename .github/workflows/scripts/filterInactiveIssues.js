@@ -31,7 +31,7 @@ module.exports = async ({github, context, core}) => {
                 number : issue.number,
                 title : issue.title,
                 url: issue.html_url,
-                assignee: issue.assignees.length ? issue.assignees[0].login : null
+                assignee: issue.assignees.length ? issue.assignees[0].login : '???'
             });
         }
     }
