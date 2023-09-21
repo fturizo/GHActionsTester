@@ -30,8 +30,9 @@ jobs:
         id: notify-ms-teams
         if: ${{ success() && steps.filter-inactive-issues.outputs.result }}
         uses: simbo/msteams-message-card-action@latest
-        matrix:
-          issues: ${{ fromJSON(steps.filter-inactive-issues.outputs.result) }}
+        strategy:
+          matrix:
+            issues: ${{ fromJSON(steps.filter-inactive-issues.outputs.result) }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
