@@ -43,6 +43,6 @@ jobs:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: Inactive Issue Detected
           message: |
-            It's been ${{ inactiveIntervalDays }} since issue number <code>${{ matrix.issues.number }}</code> has received an update. <strong>${{ matrix.issues.assignee }}</strong>, please provide an update soon.
+            It's been ${{ env.inactiveIntervalDays }} since issue number <code>${{ matrix.issues.number }}</code> has received an update. <strong>${{ matrix.issues.assignee }}</strong>, please provide an update soon.
           buttons: |
             View Issue on GitHub ${{ matrix.issues.url }}
