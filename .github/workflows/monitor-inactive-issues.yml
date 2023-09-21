@@ -3,13 +3,13 @@ name: Monitor Inactive Open Issues
 on: workflow_dispatch
 #  schedule:
 #    - cron: "0 10 * * 1-5"
+env:
+  inactiveIntervalDays: ${{ vars.MONITORING_INACTIVE_INTERVAL_DAYS }}
 jobs:
   retrieve-inactive-issues:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-    env:
-      inactiveIntervalDays: ${{ vars.MONITORING_INACTIVE_INTERVAL_DAYS }}
     outputs:
       issues: ${{ steps.filter-inactive-issues.outputs.result }}
     steps:
@@ -41,7 +41,8 @@ jobs:
         uses: simbo/msteams-message-card-action@latest
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
-          title: An Enhancement Proposal Issue has been selected the top-voted issue!
-          message: <code>${{ matrix.issues.title }}</code> assigned to <strong>${{ matrix.issues.assignee }}</strong>
+          title: Inactive Issue Detected
+          message: |
+            It's been ${{ inactiveIntervalDays }} since issue number <code>${{ matrix.issues.number }}</code> has received an update. <strong>${{ matrix.issues.assignee }}</strong>, please provide an update soon.
           buttons: |
             View Issue on GitHub ${{ matrix.issues.url }}
