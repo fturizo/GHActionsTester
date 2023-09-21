@@ -27,7 +27,7 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/filterInactiveIssues.js');
-            await script({github, context, core});
+            return await script({github, context, core});
   notify-inactive-issues:
     runs-on: ubuntu-latest
     needs: retrieve-inactive-issues
