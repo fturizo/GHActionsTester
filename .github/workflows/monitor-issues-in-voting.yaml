@@ -15,10 +15,6 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/selectMostVotedIssue.js')
             return await script({github, context, core})
-      - name: Verify output of select most voted enhancement step
-        id: verify-top-voted-issue
-        run: |
-          echo ${{ steps.select-top-voted-issue.outputs.result == '' }}
       - name: Notify MS Teams channel
         id: notify-ms-teams
         if: ${{ success() && !steps.select-top-voted-issue.outputs.result == '' }}
@@ -26,9 +22,9 @@ jobs:
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
-          message: <code>${{ env.issueTitle }}</code> assigned to <strong>${{ env.assignee }}</strong>
+          message: <code>${{ fromJSON(steps.select-top-voted-issue.outputs.result).title }}</code> assigned to <strong>${{ fromJSON(steps.select-top-voted-issue.outputs.result).assignee }}</strong>
           buttons: |
-            View Issue on GitHub ${{ env.issueURL }}
+            View Issue on GitHub ${{ fromJSON(steps.select-top-voted-issue.outputs.result).url }}
   close-forgotten-voting-issues:
     runs-on: ubuntu-latest
     permissions:
