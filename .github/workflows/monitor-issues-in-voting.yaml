@@ -1,7 +1,5 @@
 name: Monitor issues on voting status
-on:
-  schedule:
-    - cron: "0 10 1 * *"
+on: workflow_dispatch
 
 jobs:
   select-top-voted-issue:
@@ -17,9 +15,13 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/selectMostVotedIssue.js')
             return await script({github, context, core})
+      - name: Verify output of select most voted enhancement step
+        id: verify-top-voted-issue
+        run: |
+          echo ${{ steps.select-top-voted-issue.outputs.result == '' }}
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        if: ${{ success() && steps.select-top-voted-issue.outputs.result }}
+        if: ${{ success() && steps.select-top-voted-issue.outputs.result != '' }}
         uses: simbo/msteams-message-card-action@latest
         env:
           issueTitle: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).title }}
