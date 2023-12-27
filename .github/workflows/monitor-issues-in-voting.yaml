@@ -21,12 +21,8 @@ jobs:
           echo ${{ steps.select-top-voted-issue.outputs.result == '' }}
       - name: Notify MS Teams channel
         id: notify-ms-teams
-        if: ${{ success() && steps.select-top-voted-issue.outputs.result != '' }}
+        if: ${{ success() && !steps.select-top-voted-issue.outputs.result == '' }}
         uses: simbo/msteams-message-card-action@latest
-        env:
-          issueTitle: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).title }}
-          issueURL: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).url }}
-          assignee: ${{ fromJSON(steps.select-top-voted-issue.outputs.result).assignee }}
         with:
           webhook: ${{ secrets.COMMUNITY_EVENTS_WEBHOOK_URL }}
           title: An Enhancement Proposal Issue has been selected the top-voted issue!
